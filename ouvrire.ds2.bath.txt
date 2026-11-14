@@ -1,0 +1,11 @@
+# Ouvre une session psql sur DS2
+Set-Location C:\Users\jofar\ds2
+$env:Path += ";C:\Users\jofar\postgres16\pgsql\bin"
+Get-Content .env | ForEach-Object { $k, $v = $_ -split '=', 2; Set-Item "env:$k" $v }
+$env:PGCLIENTENCODING = "UTF8"
+
+# Démarre le serveur s'il ne tourne pas (après un redémarrage du PC)
+pg_ctl status -D C:\Users\jofar\postgres16\data *> $null
+if ($LASTEXITCODE -ne 0) { pg_ctl start -D C:\Users\jofar\postgres16\data -l C:\Users\jofar\postgres16\serveur.log }
+
+psql
